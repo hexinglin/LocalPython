@@ -24,4 +24,4 @@ class Visitor:
             raise Exception("port can not found")
         self.PORT =dataContent['port']
 
-        self.COUNT = 100
+        self.COUNT = 5

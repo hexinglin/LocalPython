@@ -25,15 +25,18 @@ class TransmitManage(threading.Thread):
         pass
 
     def sendPic(self,pic,NO):
+        self.net.sendPic2(pic)
+
         if self.clientList.get(NO) == None:
             return
         clients = self.clientList[NO]
         for visitor in clients:
-            self.net.sendPic()
-
-            visitor.COUNT = visitor.COUNT - 1
-            pass
-
+            if visitor.COUNT >0:
+                self.net.sendPic(visitor.IP,visitor.PORT,pic)
+                visitor.COUNT = visitor.COUNT - 1
+                print(visitor.IP,visitor.PORT,visitor.COUNT)
+            else:
+                self.clientList[NO].remove(visitor)
 
     def run(self):
 
