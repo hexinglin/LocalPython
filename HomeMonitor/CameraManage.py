@@ -5,7 +5,7 @@ import time
 import numpy as np
 # 不需要建立连接
 import socket
-from HomeCamera.TransmitManage import TransmitManage
+from TransmitManage import TransmitManage
 
 transmitManage = TransmitManage()
 transmitManage.addCamera(0)

@@ -2,7 +2,6 @@
 import socket
 import threading
 import json
-from HomeCamera.Visitor import Visitor
 import cv2
 import numpy as np
 encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
@@ -23,11 +22,6 @@ class Net(threading.Thread):
         if dataJson.get('action') == None:
             return
         print(dataJson)
-        if "feedback" == dataJson['action']:
-            try:
-                self.transmitManage.addCameraVisitor(Visitor(jsonData=dataJson))
-            except:
-                pass
 
 
 
