@@ -6,10 +6,11 @@ import numpy as np
 # 不需要建立连接
 import socket
 from TransmitManage import TransmitManage
+from Camera import Camera
 
 transmitManage = TransmitManage()
 transmitManage.addCamera(0)
-capture = cv2.VideoCapture(0)
+capture = Camera(0)
 
 while(True):
     # 获取一帧
