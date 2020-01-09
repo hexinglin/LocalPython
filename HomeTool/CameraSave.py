@@ -1,10 +1,12 @@
 import mmap
 import cv2
 import os
+import numpy as np
 from datetime import datetime
 
 
-class CameraSave():
+
+class PicSave():
     def __init__(self,no:int=0):
         savePath = '/etc/home/camera/{}/'.format(no)
 
@@ -48,12 +50,44 @@ class CameraSave():
 
 
 
+class CameraSave():
+
+    def __init__(self,no:int=0):
+        self.cap = cv2.VideoCapture(no)
+
+    def read(self):
+        ret, frame = self.cap.read()
+        if ret:
+            self.add_time_flag(frame)
+        return ret,frame
+
+    def add_time_flag(self,frame):
+        time_str = (datetime.now()).strftime("%Y-%m-%d %H:%M:%S")
+        h = frame.shape[0]
+        w = frame.shape[1]
+
+        #当背景色为黑色时，时间显示为白色
+        color = (255, 255, 255)
+        if np.mean(frame[int(h*0.97):h, int(w*0.83):w]) > 128:
+            color = (0, 0, 0)
+
+        cv2.putText(frame, time_str, (int(w*0.83), int(h*0.97)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+        return frame
+
+
 if __name__ == '__main__':
-    cap = cv2.VideoCapture(0)
-    save= CameraSave()
+    CS = CameraSave()
+    save= PicSave()
     while True:
-        ret, frame = cap.read()
-        save.save(frame)
+        ret,frame = CS.read()
+        if ret:
+            save.save(frame)
+
+
+
+
+
+
 
 
 
