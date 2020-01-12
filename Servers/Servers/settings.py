@@ -25,7 +25,7 @@ SECRET_KEY = '=sk!s^$7))&n-zcx=78@7cp2amx%^g%7gvl*097t6obu6+65hr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.3.6','homeServer.tokgo.cn']
+ALLOWED_HOSTS = ['192.168.3.6','home-server.tokgo.cn']
 
 
 # Application definition
