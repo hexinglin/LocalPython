@@ -8,9 +8,9 @@ from datetime import datetime
 
 class PicSave():
     def __init__(self,no:int=0):
-        savePath = '/etc/home/camera/{}/'.format(no)
+        # savePath = '/etc/home/camera/{}/'.format(no)
 
-        # savePath = '/Users/hxl/my/LocalPython/{}/'.format(no)
+        savePath = '/Users/hxl/my/LocalPython/{}/'.format(no)
         #检查信息存储文件
         if not os.path.exists(savePath):
             os.makedirs(savePath)
@@ -68,10 +68,10 @@ class CameraSave():
 
         #当背景色为黑色时，时间显示为白色
         color = (255, 255, 255)
-        if np.mean(frame[int(h*0.97):h, int(w*0.83):w]) > 128:
+        if np.mean(frame[int(h*0.97):h, int(w*0.05):w]) > 128:
             color = (0, 0, 0)
 
-        cv2.putText(frame, time_str, (int(w*0.83), int(h*0.97)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+        cv2.putText(frame, time_str, (int(w*0.05), int(h*0.97)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
         return frame
 
 
