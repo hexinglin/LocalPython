@@ -8,9 +8,9 @@ import time
 
 class PicSave():
     def __init__(self,no:int=0):
-        # savePath = '/etc/home/camera/{}/'.format(no)
+        savePath = '/etc/home/camera/{}/'.format(no)
 
-        savePath = '/Users/hxl/my/LocalPython/{}/'.format(no)
+        # savePath = '/Users/hxl/my/LocalPython/{}/'.format(no)
         #检查信息存储文件
         if not os.path.exists(savePath):
             os.makedirs(savePath)
