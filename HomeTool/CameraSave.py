@@ -3,7 +3,7 @@ import cv2
 import os
 import numpy as np
 from datetime import datetime
-
+import time
 
 
 class PicSave():
@@ -68,10 +68,10 @@ class CameraSave():
 
         #当背景色为黑色时，时间显示为白色
         color = (255, 255, 255)
-        if np.mean(frame[int(h*0.97):h, int(w*0.05):w]) > 128:
+        if np.mean(frame[int(h*0.97):h, int(w*0.01):int(w*0.2)]) > 128:
             color = (0, 0, 0)
 
-        cv2.putText(frame, time_str, (int(w*0.05), int(h*0.97)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+        cv2.putText(frame, time_str, (int(w*0.01), int(h*0.97)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
         return frame
 
 
@@ -79,6 +79,7 @@ if __name__ == '__main__':
     CS = CameraSave()
     save= PicSave()
     while True:
+        time.sleep(0.01)
         ret,frame = CS.read()
         if ret:
             save.save(frame)

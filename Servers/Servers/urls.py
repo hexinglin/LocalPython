@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from Servers.apps.camera.views import get_home_pic
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('getpic/', get_home_pic),
 ]
