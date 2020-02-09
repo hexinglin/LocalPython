@@ -8,9 +8,7 @@ import time
 
 class PicSave():
     def __init__(self,no:int=0):
-        # savePath = '/etc/home/camera/{}/'.format(no)
-
-        savePath = '/Users/hxl/my/LocalPython/{}/'.format(no)
+        savePath = '/etc/home/camera/{}/'.format(no)
         #检查信息存储文件
         if not os.path.exists(savePath):
             os.makedirs(savePath)
@@ -80,9 +78,21 @@ if __name__ == '__main__':
     save= PicSave()
     while True:
         time.sleep(0.01)
-        ret,frame = CS.read()
-        if ret:
-            save.save(frame)
+        try:
+            ret,frame = CS.read()
+            if ret:
+                try:
+                    save.save(frame)
+                    pass
+                except:
+                    pass
+            else:
+                raise Exception('read false')
+        except :
+            time.sleep(1)
+            CS = CameraSave(0)
+            print('error')
+
 
 
 
