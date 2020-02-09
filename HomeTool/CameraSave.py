@@ -99,13 +99,13 @@ if __name__ == '__main__':
                 try:
                     save.save(frame)
                     pass
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
             else:
                 raise Exception('read false')
-        except :
+        except Exception as e:
             CS.re_load_camera()
-            print('error')
+            print(e)
 
 
 
