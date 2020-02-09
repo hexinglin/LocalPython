@@ -72,11 +72,24 @@ class CameraSave():
         cv2.putText(frame, time_str, (int(w*0.01), int(h*0.97)), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
         return frame
 
+    def re_load_camera(self):
+        try:
+            self.cap.release()
+        except:
+            pass
+        for i in range(5):
+            time.sleep(1)
+            try:
+                cap = cv2.VideoCapture(i)
+                ret, frame = cap.read()
+                if ret:
+                    self.cap=cap
+                    break
+            except:
+                pass
 
 if __name__ == '__main__':
-    video = os.system('ls /dev/video*')
-    print(video)
-    CS = CameraSave(video)
+    CS = CameraSave(0)
     save= PicSave()
     while True:
         time.sleep(0.01)
@@ -91,8 +104,7 @@ if __name__ == '__main__':
             else:
                 raise Exception('read false')
         except :
-            time.sleep(1)
-            CS = CameraSave(0)
+            CS.re_load_camera()
             print('error')
 
 
