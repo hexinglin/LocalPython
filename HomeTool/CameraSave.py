@@ -74,7 +74,9 @@ class CameraSave():
 
 
 if __name__ == '__main__':
-    CS = CameraSave(os.system('ls /dev/video*'))
+    video = os.system('ls /dev/video*')
+    print(video)
+    CS = CameraSave(video)
     save= PicSave()
     while True:
         time.sleep(0.01)
