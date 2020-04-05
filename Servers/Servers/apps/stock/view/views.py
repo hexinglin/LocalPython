@@ -18,6 +18,7 @@ def get_test_data(request):
     macd = calcMACD(12,26,9,df.values[:, 2:6].tolist(),1)
 
     redata ={
+        'code':'002455.SZ',
         'times':df.values[:,1].tolist(),
         'datas': df.values[:, 2:6].tolist(),
         'vols': df.values[:, 9].tolist(),
@@ -50,6 +51,7 @@ def get_Min_data(request):
         avgPrice.append(round(Tamount / Tvol, 2))
     redata ={
         'date':date,
+        'code': '002455.SZ',
         'priceArr': datadf['close'].tolist(),
         'avgPrice': avgPrice,
         'vol': datadf['vol'].tolist(),
