@@ -80,8 +80,13 @@ WSGI_APPLICATION = 'Servers.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.mysql',
+        # 'HOST': 'cdb-p7b1ovok.cd.tencentcdb.com',
+        # 'PORT': 10050,
+        # 'NAME': 'tokgo_test',
+        # 'USER': 'root',
+        # 'PASSWORD': '141459awdfth',
+        # 'PASSWORD': '141459awdfth',
     }
 }
 

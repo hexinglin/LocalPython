@@ -1,9 +1,7 @@
 #coding=utf8
-import numpy as np
 import pandas as pd
 
-from numpy import array
-from .MACDUtil import calcMACD
+from Servers.apps.stock.service.MACDUtil import calcMACD
 import json
 from django.http import HttpResponse
 
