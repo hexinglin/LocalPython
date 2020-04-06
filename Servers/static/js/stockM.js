@@ -51,11 +51,15 @@ document.getElementById('buy').onclick= function() {
 	costPricet = document.getElementById('price').value;
 	numt = document.getElementById('num').value;
 	if (costPricet<nowStockData.yestclose*0.9 | costPricet>nowStockData.yestclose*1.1){
-		alert('信息错误');
+		alert('超过价格区间');
 		return;
 	}
 	if (numt<100){
-		alert('信息错误');
+		alert('数量不对');
+		return;
+	}
+	if (accountInfo.available < costPricet*numt){
+		alert('可用金额不对');
 		return;
 	}
 	myinfo={
@@ -65,28 +69,38 @@ document.getElementById('buy').onclick= function() {
 		action:'buy',
 		num:numt
 	}
-	willStock[myinfo.flag] = myinfo
+	willStock[myinfo.flag] = myinfo;
+	accountInfo.available -= costPricet*numt;
 }
 document.getElementById('sale').onclick= function() {
 	costPricet = document.getElementById('price').value;
 	numt = document.getElementById('num').value;
 	if (costPricet<nowStockData.yestclose*0.9 | costPricet>nowStockData.yestclose*1.1){
-		alert('信息错误');
+		alert('超过价格区间');
 		return;
 	}
 	if (numt<100){
-		alert('信息错误');
+		alert('数量不对');
 		return;
 	}
-
-	myinfo={
-		flag:new Date().getTime(),
-		code:nowStockData.code,
-		costPrice:costPricet,
-		action:'sale',
-		num:numt
+	let ha = myStock[nowStockData.code];
+	if (!ha){
+		alert('余额不足');
+		return;
 	}
+	if (numt>ha.cannum){
+		alert('余额不足');
+		return;
+	}
+	myinfo={
+			flag:new Date().getTime(),
+			code:nowStockData.code,
+			costPrice:costPricet,
+			action:'sale',
+			num:numt
+		}
 	willStock[myinfo.flag] = myinfo
+	ha.cannum -= numt;
 }
 
 
@@ -113,8 +127,8 @@ window.onload = function(){
 		 }
 	 });
 		accountInfo={
-			lave:0.0,
-			available:0.0,
+			lave:100000.0,
+			available:100000.0,
 			market_value:0.0,
 			percentage:0.0,
 			book_assets:0.0,
@@ -130,9 +144,12 @@ function checkTransaction() {
 			//卖出
 			if (ha){
 				let sum = ha.num*ha.costPrice - nowStockData.priceArr[systime]*v.num;
-				ha.num = ha.num - v.num;
+				ha.num -= parseInt(v.num);
+				ha.cannum -=parseInt(v.num);
 				ha.costPrice = sum/ha.num;
 				delete willStock[key];
+				accountInfo.lave += nowStockData.priceArr[systime]*v.num;
+				accountInfo.available += nowStockData.priceArr[systime]*v.num;
 			}else {
 				delete willStock[key];
 				continue;
@@ -140,15 +157,18 @@ function checkTransaction() {
 		}else if('buy'==v.action & nowStockData.priceArr[systime] <= v.costPrice){
 			if (ha){
 				let sum = ha.num*ha.costPrice + nowStockData.priceArr[systime]*v.num;
-				ha.num = ha.num + v.num;
+				ha.num +=parseInt(v.num);
 				ha.costPrice = sum/ha.num;
+				ha.cannum +=parseInt(v.num);
 			}else {
 				myStock[v.code]={
 					code:v.code,
 					costPrice:v.costPrice,
-					num:v.num
+					num:parseInt(v.num),
+					cannum:parseInt(v.num)
 				}
 			}
+			accountInfo.lave -= nowStockData.priceArr[systime]*v.num;
 			delete willStock[key];
 		}
 
@@ -181,13 +201,17 @@ function addline () {
 
 
 function updateAccountInfo() {
-	let sum = 0;
+	let stocksum = 0;
 	for (let key in myStock) {
 		let v = myStock[key];
-		sum +=v.costPrice * v.num;
+		stocksum +=nowStockData.priceArr[systime] * v.num;
 	}
 
-	var val = "余额："+accountInfo.lave+"　可用："+accountInfo.lave+"　市值："+parseInt(sum)+"　仓位："+"%　帐面资产："+accountInfo.lave+"　";
+	var val = "余额："+accountInfo.lave.toFixed(2)+
+		"　可用："+accountInfo.available.toFixed(2)+
+		"　市值："+stocksum.toFixed(2)+
+		"　仓位："+(stocksum/(stocksum+accountInfo.lave)*100).toFixed(2)+
+		"%　帐面资产："+(stocksum+accountInfo.lave).toFixed(2)+"　";
 
 
 	document.getElementById('account_info').innerHTML  =val;
