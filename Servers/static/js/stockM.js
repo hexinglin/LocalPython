@@ -150,10 +150,11 @@ function checkTransaction() {
 				delete willStock[key];
 				accountInfo.lave += nowStockData.priceArr[systime]*v.num;
 				accountInfo.available += nowStockData.priceArr[systime]*v.num;
-			}else {
-				delete willStock[key];
-				continue;
+				if (ha.num<=0){
+					delete myStock[ha.code];
+				}
 			}
+			delete willStock[key];
 		}else if('buy'==v.action & nowStockData.priceArr[systime] <= v.costPrice){
 			if (ha){
 				let sum = ha.num*ha.costPrice + nowStockData.priceArr[systime]*v.num;
@@ -202,18 +203,37 @@ function addline () {
 
 function updateAccountInfo() {
 	let stocksum = 0;
+	let stocklist = document.getElementById("stocklist");
+	let size = stocklist.rows.length;
+	for (let i = 1; i <size; i++) {
+		stocklist.deleteRow(i);
+	}
 	for (let key in myStock) {
 		let v = myStock[key];
 		stocksum +=nowStockData.priceArr[systime] * v.num;
+
+		var newRow =stocklist.insertRow(1) ;
+		newRow.insertCell(0).innerHTML=v.code;
+		newRow.insertCell(1).innerHTML=parseFloat(v.costPrice).toFixed(2);
+		newRow.insertCell(2).innerHTML=parseFloat(nowStockData.priceArr[systime]).toFixed(2);
+		newRow.insertCell(3).innerHTML=v.num;
+		newRow.insertCell(4).innerHTML=v.cannum;
+		newRow.insertCell(5).innerHTML=parseFloat(v.num*nowStockData.priceArr[systime]).toFixed(2);
 	}
+
+
+
+	// displayList.forEach(function (obj, i) {
+	// 	customers.rows[i + 1].cells[0].innerHTML = obj.id;
+	// 	customers.rows[i + 1].cells[1].innerHTML = obj.name;
+	// 	customers.rows[i + 1].cells[2].innerHTML = obj.num;
+	// })
 
 	var val = "余额："+accountInfo.lave.toFixed(2)+
 		"　可用："+accountInfo.available.toFixed(2)+
 		"　市值："+stocksum.toFixed(2)+
 		"　仓位："+(stocksum/(stocksum+accountInfo.lave)*100).toFixed(2)+
 		"%　帐面资产："+(stocksum+accountInfo.lave).toFixed(2)+"　";
-
-
 	document.getElementById('account_info').innerHTML  =val;
 }
 

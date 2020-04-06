@@ -9,18 +9,9 @@
 		<title>行情分时</title>
 	</head>
 	<body>
-	 <div style="width: 100%;height: 10%;">
+	 <div style="width: 100%;height: 2%;">
         <!--  <td>星币：余额：46085477　可用：4608.55万　市值：2908.94万　仓位：33.90%　帐面资产：8580.25万　盈亏：<span
                  style="color: red; ">-7159.17万</span></td>-->
-         <div class="table-c">
-             <table id="stocklist"  border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                    <th>股票代码</th><th>成本价</th><th>数量</th><th>可用</th><th>现价</th><th>市值</th>
-                </tr>
-            </table>
-
-             <p id="account_info"></p>
-         </div>
     </div>
 
     <div class="outer-container">
@@ -46,6 +37,12 @@
                 <input type="button" style="font-size: 25px" value="买入" id="buy" >
                  <input type="button" style="font-size: 25px" value="卖出" id="sale" >
             </div>
+                <div class="table-c">
+             <table id="willlist"  border="0" cellspacing="0" cellpadding="0" width="80%">
+                <tr >
+                    <th >股票代码</th><th>价格</th><th>数量</th><th>事件</th><th>操作</th>
+                </tr>
+            </table>
 
 
         </div>
@@ -54,7 +51,17 @@
     </div>
 
     <div style="width: 100%;height: 10%;">
-        <div style="width: 100%;height:100% ; background-color: blue" ></div>
+        <div style="width: 100%;height:100% ">
+            <div class="table-c" style="margin-left: 3%;margin-top: 1%; text-align: center;">
+             <table id="stocklist"  border="0" cellspacing="0" cellpadding="0" width="80%">
+                <tr >
+                    <th >股票代码</th><th>成本价</th><th>现价</th><th>数量</th><th>可用</th><th>市值</th>
+                </tr>
+            </table>
+
+             <p id="account_info"></p>
+         </div>
+        </div>
     </div>
         <script src="../../static/js/page/jquery-3.3.1.min.js"></script>
 		<script src="../../static/js/page/echarts.min.js" type="text/javascript" charset="utf-8"></script>

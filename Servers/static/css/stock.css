@@ -31,7 +31,8 @@ html, body {
   width: 50%;
   /*height: 40%;*/
 }
-
-.table-c table{border-right:1px solid #F00;border-bottom:1px solid #F00}
+/*.table-c {margin-left: 3%;margin-top: 1%; text-align: center;}*/
+.table-c table{border-right:1px solid #F00;border-bottom:1px solid #F00;}
 .table-c table td{border-left:1px solid #F00;border-top:1px solid #F00}
+
 
