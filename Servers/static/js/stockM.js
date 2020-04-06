@@ -212,7 +212,7 @@ function updateAccountInfo() {
 		let v = myStock[key];
 		stocksum +=nowStockData.priceArr[systime] * v.num;
 
-		var newRow =stocklist.insertRow(1) ;
+		let newRow =stocklist.insertRow(1) ;
 		newRow.insertCell(0).innerHTML=v.code;
 		newRow.insertCell(1).innerHTML=parseFloat(v.costPrice).toFixed(2);
 		newRow.insertCell(2).innerHTML=parseFloat(nowStockData.priceArr[systime]).toFixed(2);
@@ -221,6 +221,20 @@ function updateAccountInfo() {
 		newRow.insertCell(5).innerHTML=parseFloat(v.num*nowStockData.priceArr[systime]).toFixed(2);
 	}
 
+	let willlist = document.getElementById("willlist");
+	let willsize = willlist.rows.length;
+	for (let i = 1; i <willsize; i++) {
+		willlist.deleteRow(i);
+	}
+	let num =0;
+	for (let key in willStock) {
+		let v = willStock[key];
+		let newRow =willlist.insertRow(1) ;
+		newRow.insertCell(0).innerHTML=parseFloat(v.costPrice).toFixed(2);
+		newRow.insertCell(1).innerHTML=v.num;
+		newRow.insertCell(2).innerHTML=v.action;
+		newRow.insertCell(3).innerHTML="<input type=\"button\" value=\"撤销\" />";
+	}
 
 
 	// displayList.forEach(function (obj, i) {
