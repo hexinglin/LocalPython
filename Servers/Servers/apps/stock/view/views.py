@@ -3,9 +3,12 @@ import pandas as pd
 
 from Servers.apps.stock.service.MACDUtil import calcMACD
 import json
+import os
 from django.http import HttpResponse
-
 import tushare as ts
+from django.conf import settings
+from datetime import datetime,timedelta
+
 ts.set_token('cf3228b45527b18b17e20f2266d5abbdeb4600bcebf4a8b64c545176')
 def get_test_data(request):
     df = ts.pro_bar(ts_code='002455.SZ', start_date='20180501', end_date='20181051', ma=[5,10, 20, 30])
@@ -32,16 +35,49 @@ def get_test_data(request):
     }
     return HttpResponse(json.dumps(redata),content_type='application/json')
 
-def get_Min_data(request):
-    from django.conf import settings
-    from datetime import datetime
+
+def getMinData(stockcode, stocktime):
+    try:
+        datadfo = pd.read_csv(settings.BASE_DIR + "/static/stock/"+stockcode.split('.')[0]+"/min-"+stocktime+".csv")
+        if datadfo.shape[0] ==241:
+            datadfo = datadfo.sort_values(by='trade_time', ascending=True)
+            return datadfo
+    except:
+        pass
+    return None
+
+
+def getMindataByBase(stockcode, stocktime):
+    all_e_date = datetime.strptime(stocktime, '%Y%m%d')
+    all_s_date = all_e_date - timedelta(days=30)
     datadfo = pd.read_csv(settings.BASE_DIR+"/static/Result1.csv")
     datadfo = datadfo.sort_values(by='trade_time', ascending=True)
-    date = '2020-03-30'
     timedf = pd.to_datetime(datadfo['trade_time'], infer_datetime_format=True)
-    s_date = datetime.strptime(date+' 09', '%Y-%m-%d %H')
-    e_date = datetime.strptime(date+' 15', '%Y-%m-%d %H')
-    datadf = datadfo[(timedf >= s_date) & (timedf <= e_date)]
+
+    if not os.path.exists(settings.BASE_DIR + "/static/stock/"+stockcode.split('.')[0]):
+        os.makedirs(settings.BASE_DIR + "/static/stock/"+stockcode.split('.')[0])
+
+    for i in range(31):
+        s_date = all_s_date +timedelta(days=i)
+        e_date = all_s_date + timedelta(days=(i+1))
+        datadsave = datadfo[(timedf >= s_date) & (timedf <= e_date)]
+        if datadsave.shape[0] ==241:
+            datadsave.to_csv(settings.BASE_DIR + "/static/stock/"+stockcode.split('.')[0]+"/min-"+s_date.strftime('%Y%m%d')+".csv")
+
+
+
+def get_Min_data(request):
+    stockcode =request.GET['code']
+    stocktime = request.GET['time']
+    #查询是否含有文件
+    datadf = getMinData(stockcode,stocktime)
+    if datadf is None:
+        #如果没有下载文件
+        getMindataByBase(stockcode,stocktime)
+        datadf = getMinData(stockcode, stocktime)
+    if datadf is None:
+        return HttpResponse(json.dumps({}), content_type='application/json')
+
     avgPrice=[]
     Tamount = 0
     Tvol = 0
@@ -50,7 +86,7 @@ def get_Min_data(request):
         Tvol += row['vol']
         avgPrice.append(round(Tamount / Tvol, 2))
     redata ={
-        'date':date,
+        'date':stocktime,
         'code': '002455.SZ',
         'priceArr': datadf['close'].tolist(),
         'avgPrice': avgPrice,
