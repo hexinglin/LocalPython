@@ -1,9 +1,65 @@
+#coding=utf-8
+import json
 import mmap
-import cv2
 import os
+import cv2
 import numpy as np
-from datetime import datetime
+import socket
+import threading
 import time
+from datetime import datetime
+
+encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]
+
+
+class Net(threading.Thread):
+    client_list = []
+
+
+    def __init__(self):
+        super().__init__()
+        self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.s.bind(("0.0.0.0", 9000))  # 绑定服务器的ip和端口
+        self.start()
+
+
+    def sendPic(self,pic):
+        img_encode = cv2.imencode('.jpg', pic, encode_param)[1]
+        data = np.array(img_encode)
+        imgData = data.tobytes()
+        for client in self.client_list:
+            try:
+                self.s.sendto(imgData, client['adrr'])
+                client['count'] = client['count'] - 1
+                print(client['count'])
+                if client['count'] < 0:
+                    self.client_list.remove(client)
+            except:
+                pass
+
+
+    def sendData(self,ip,port,data):
+        str = json.dumps(data)
+        bs = bytes(str, encoding="gbk")
+        self.s.sendto(bs,(ip,port))
+        pass
+
+
+    def regClient(self,adrr):
+        for client in self.client_list:
+            if client['adrr'] == adrr:
+                client['count'] = 10000
+                return
+        self.client_list.append({'adrr':adrr,'count':10000})
+
+    def run(self):
+        while True:
+            try:
+                stringData,adrr = self.s.recvfrom(65500)
+                self.regClient(adrr)
+            except :
+                continue
+
 
 
 class PicSave():
@@ -91,6 +147,7 @@ class CameraSave():
 if __name__ == '__main__':
     CS = CameraSave(0)
     save= PicSave()
+    net = Net()
     while True:
         time.sleep(0.01)
         try:
@@ -98,7 +155,8 @@ if __name__ == '__main__':
             if ret:
                 try:
                     save.save(frame)
-                    pass
+                    net.sendPic(frame)
+                    time.sleep(0.01)
                 except Exception as e:
                     print(e)
             else:
