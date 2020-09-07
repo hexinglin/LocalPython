@@ -31,7 +31,6 @@ class Net(threading.Thread):
             try:
                 self.s.sendto(imgData, client['adrr'])
                 client['count'] = client['count'] - 1
-                print(client['count'])
                 if client['count'] < 0:
                     self.client_list.remove(client)
             except:
@@ -149,14 +148,13 @@ if __name__ == '__main__':
     save= PicSave()
     net = Net()
     while True:
-        time.sleep(0.01)
+        time.sleep(0.05)
         try:
             ret,frame = CS.read()
             if ret:
                 try:
                     save.save(frame)
                     net.sendPic(frame)
-                    time.sleep(0.01)
                 except Exception as e:
                     print(e)
             else:
