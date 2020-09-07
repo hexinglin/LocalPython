@@ -47,9 +47,9 @@ class Net(threading.Thread):
     def regClient(self,adrr):
         for client in self.client_list:
             if client['adrr'] == adrr:
-                client['count'] = 10000
+                client['count'] = 500
                 return
-        self.client_list.append({'adrr':adrr,'count':10000})
+        self.client_list.append({'adrr':adrr,'count':500})
 
     def run(self):
         while True:
