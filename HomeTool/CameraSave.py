@@ -19,7 +19,7 @@ class Net(threading.Thread):
     def __init__(self):
         super().__init__()
         self.s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.s.bind(("0.0.0.0", 9000))  # 绑定服务器的ip和端口
+        self.s.bind(("0.0.0.0", 9100))  # 绑定服务器的ip和端口
         self.start()
 
 
