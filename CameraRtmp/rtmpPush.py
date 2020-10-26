@@ -26,7 +26,7 @@ def get_cap(cap):
 def init_info(rtmpUrl,cap):
     cap = get_cap(cap = cap)
     # Get video information
-    fps = int(cap.get(cv2.CAP_PROP_FPS))
+    fps = 10
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
