@@ -45,7 +45,7 @@ def init_info(rtmpUrl,cap):
                     '-f', 'flv',
                     rtmpUrl]
 
-    p = sp.Popen(command, stdin=sp.PIPE,shell=True)
+    p = sp.Popen(command, stdin=sp.PIPE)
 
     return cap,p,fps
 def add_time_flag(frame):
