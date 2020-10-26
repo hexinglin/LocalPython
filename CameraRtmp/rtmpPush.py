@@ -62,8 +62,8 @@ def add_time_flag(frame):
     return frame
 
 if __name__ == '__main__':
-    # rtmpUrl = "rtmp://121.36.74.137:1935/stream/test"
-    rtmpUrl = "rtmp://192.168.0.135:1935/stream/test"
+    rtmpUrl = "rtmp://121.36.74.137:1935/stream/test"
+    # rtmpUrl = "rtmp://192.168.0.135:1935/stream/test"
     cap,p,fps = init_info(rtmpUrl=rtmpUrl,cap= None)
     while True:
         try:
